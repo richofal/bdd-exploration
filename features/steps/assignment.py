@@ -5,8 +5,8 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 
 # --- KONSTANTA LOGIN & URL ---
-VALID_USERNAME = "187231046"
-VALID_PASSWORD = "23Juni2004"
+VALID_USERNAME = ".."
+VALID_PASSWORD = ".."
 LOGIN_URL = "https://hebat.elearning.unair.ac.id/login/index.php"
 DASHBOARD_URL = "https://hebat.elearning.unair.ac.id/my/courses.php"
 

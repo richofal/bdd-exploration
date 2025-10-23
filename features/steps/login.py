@@ -5,17 +5,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# Kredensial dan URL tetap di sini (sesuai input Anda)
-VALID_USERNAME = "187231046" 
-VALID_PASSWORD = "23Juni2004"
+VALID_USERNAME = ".." 
+VALID_PASSWORD = ".."
 LOGIN_URL = "https://hebat.elearning.unair.ac.id/login/index.php"
-DASHBOARD_URL = "https://hebat.elearning.unair.ac.id/my/courses.php" # URL Target yang Disesuaikan
+DASHBOARD_URL = "https://hebat.elearning.unair.ac.id/my/courses.php" 
 
 @given('The Student is on the "Hebat" login page')
 def step_impl(context):
     """Memastikan browser diarahkan ke halaman login."""
     context.driver.get(LOGIN_URL)
-    # Verifikasi bahwa kita berada di halaman login dengan mencari tombol login
     login_button = context.driver.find_element(By.ID, "loginbtn")
     assert login_button.is_displayed(), "Tidak berada di halaman login Hebat"
 
@@ -43,12 +41,11 @@ def step_impl(context):
     MEMPERBAIKI VERIFIKASI URL:
     Memverifikasi bahwa URL telah berubah ke halaman My courses/Dashboard.
     """
-    # Menunggu hingga URL berubah ke halaman kursus atau dashboard
-    WebDriverWait(context.driver, 15).until( # Naikkan wait time sedikit untuk memastikan navigasi
-        # Menggunakan partial_url_to_be lebih fleksibel
+    
+    WebDriverWait(context.driver, 15).until(
         EC.url_contains("/my/")
     )
-    # Verifikasi URL saat ini BUKAN URL login
+
     current_url = context.driver.current_url
     assert current_url != LOGIN_URL, f"Gagal dialihkan. Tetap di halaman login: {current_url}"
 
@@ -58,16 +55,14 @@ def step_impl(context):
     MEMPERBAIKI VERIFIKASI ELEMEN:
     Memverifikasi kehadiran elemen khas dari Dashboard, yaitu Judul 'My courses'.
     """
-    # Berdasarkan HTML yang diberikan, judul My courses ada di H1 dalam div.page-header-headings
+
     page_heading_selector = (By.XPATH, "//div[@class='page-header-headings']/h1")
     
     try:
-        # Menunggu hingga elemen judul halaman 'My courses' muncul
         WebDriverWait(context.driver, 10).until(
             EC.presence_of_element_located(page_heading_selector)
         )
         
-        # Ambil teks H1 dan pastikan itu 'My courses'
         heading_text = context.driver.find_element(*page_heading_selector).text
         assert "My courses" in heading_text, f"Header tidak menunjukkan 'My courses'. Ditemukan: {heading_text}"
         
