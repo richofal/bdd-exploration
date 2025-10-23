@@ -5,7 +5,6 @@ Feature: Student Login
   I must be able to log into the Hebat platform
 
   Scenario: Successful Login with Valid Credentials
-    # Hapus baris 'Assuming...' dan keterangan URL yang mengganggu
     
     Given The Student is on the "Hebat" login page
     When The Student enters a valid username into the "Username" field
