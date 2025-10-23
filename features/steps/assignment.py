@@ -4,22 +4,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-# --- KONSTANTA LOGIN & URL ---
-VALID_USERNAME = "187231048"
-VALID_PASSWORD = "Stepers123#"
+VALID_USERNAME = "nimmu"
+VALID_PASSWORD = "passwordmu"
 LOGIN_URL = "https://hebat.elearning.unair.ac.id/login/index.php"
 DASHBOARD_URL = "https://hebat.elearning.unair.ac.id/my/courses.php"
 
-# --- NAMA KELAS DAN TUGAS ---
 PPL_COURSE_NAME = "Pembangunan Perangkat Lunak"
 ASSIGNMENT_NAME = "Penugasan PPT"
 
-
-# ==================== GIVEN ====================
-
 @given('The Student is logged into the Hebat platform')
 def step_impl_login_prerequisite(context):
-    """Pastikan mahasiswa sudah login ke Hebat UNAIR."""
     current_url = context.driver.current_url
     if "/my/" in current_url or "/course/" in current_url:
         print("Sudah login, lanjut ke langkah berikutnya.")
@@ -40,14 +34,11 @@ def step_impl_login_prerequisite(context):
 
         WebDriverWait(context.driver, 15).until(EC.url_contains("/my/"))
         print("✅ Login berhasil.")
-
     except Exception as e:
         raise AssertionError(f"Gagal melakukan login. Error: {e}")
 
-
 @given('The Student is on the "Pembangunan Perangkat Lunak (PPL) course" page')
 def step_impl_on_course_page(context):
-    """Masuk ke halaman mata kuliah PPL."""
     if "/my/" not in context.driver.current_url:
         context.driver.get(DASHBOARD_URL)
         WebDriverWait(context.driver, 10).until(EC.url_contains("/my/"))
@@ -62,16 +53,11 @@ def step_impl_on_course_page(context):
 
         WebDriverWait(context.driver, 15).until(EC.url_contains("/course/view.php"))
         print(f"✅ Berhasil masuk ke halaman '{PPL_COURSE_NAME}'.")
-
     except Exception as e:
         raise AssertionError(f"Gagal membuka mata kuliah '{PPL_COURSE_NAME}'. Error: {e}")
 
-
-# ==================== WHEN ====================
-
 @when('The Student clicks on a specific "Assignment Title" link')
 def step_impl_click_assignment_link(context):
-    """Klik link tugas spesifik di halaman mata kuliah, lalu tutup browser otomatis setelah berhasil terbuka."""
     try:
         assignment_selector = (
             By.XPATH,
@@ -89,17 +75,14 @@ def step_impl_click_assignment_link(context):
         time.sleep(1)
         assignment_link.click()
 
-        # Tunggu hingga halaman tugas benar-benar terbuka
         WebDriverWait(context.driver, 15).until(
             EC.url_contains("/mod/assign/view.php")
         )
         print("✅ Halaman tugas berhasil dibuka.")
 
-        # Tunggu sebentar agar halaman termuat penuh, lalu tutup browser otomatis
         time.sleep(3)
         context.driver.quit()
         print("🛑 Browser ditutup otomatis setelah membuka halaman tugas.")
-
     except Exception as e:
         print(f"DEBUG: XPath dicoba: {assignment_selector[1]}")
         try:
