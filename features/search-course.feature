@@ -7,3 +7,4 @@ Feature: Student Course Search
     Given The Student is logged in and on the "Course Overview" page
     When The Student enters "Pembangunan Perangkat Lunak" into the "Search" field
     Then The Student should see the course "2025Ganjil - SII318 - Pembangunan Perangkat Lunak - S1 - Sistem Informasi - 2021 - I1" in the results
+

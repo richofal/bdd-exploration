@@ -61,19 +61,7 @@ def step_impl(context, course_name):
     Memverifikasi bahwa mata kuliah yang dicari muncul dalam daftar hasil.
     Step ini akan menunggu (WebDriverWait) hingga hasil pencarian AJAX muncul.
     """
-    
-    # Berdasarkan HTML hasil pencarian:
-    # <li ... data-region="course-content">
-    #   ...
-    #   <a ... class="aalink coursename">
-    #     ... (teks nama mata kuliah ada di sini) ...
-    #   </a>
-    # </li>
-    
-    # XPath ini mencari <li> (item kursus) yang di dalamnya memiliki <a> (link nama)
-    # yang teksnya mengandung nama mata kuliah yang kita cari.
-    # normalize-space() digunakan untuk mengatasi spasi/newline aneh di dalam tag <a>.
-    
+
     xpath_selector = f"//li[@data-region='course-content']//a[contains(@class, 'coursename') and contains(normalize-space(), '{course_name}')]"
     
     try:
