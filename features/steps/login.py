@@ -6,8 +6,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 # Kredensial dan URL tetap di sini (sesuai input Anda)
-VALID_USERNAME = "nim" 
-VALID_PASSWORD = "password"
+VALID_USERNAME = "187231048" 
+VALID_PASSWORD = "Stepers123#"
 LOGIN_URL = "https://hebat.elearning.unair.ac.id/login/index.php"
 DASHBOARD_URL = "https://hebat.elearning.unair.ac.id/my/courses.php" # URL Target yang Disesuaikan
 
