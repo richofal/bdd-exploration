@@ -1,41 +1,17 @@
+# File: features/steps/assignment.py (INI YANG SUDAH DIPERBAIKI)
+
 from behave import given, when
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-VALID_USERNAME = "nim"
-VALID_PASSWORD = "password"
-LOGIN_URL = "https://hebat.elearning.unair.ac.id/login/index.php"
+# === 1. KONSTANTA (SUDAH BENAR) ===
 DASHBOARD_URL = "https://hebat.elearning.unair.ac.id/my/courses.php"
-
 PPL_COURSE_NAME = "Pembangunan Perangkat Lunak"
-ASSIGNMENT_NAME = "Penugasan PPT"
+ASSIGNMENT_NAME = "Penugasan PPT" 
 
-@given('The Student is logged into the Hebat platform')
-def step_impl_login_prerequisite(context):
-    current_url = context.driver.current_url
-    if "/my/" in current_url or "/course/" in current_url:
-        print("Sudah login, lanjut ke langkah berikutnya.")
-        return
-
-    context.driver.get(LOGIN_URL)
-    try:
-        username_field = WebDriverWait(context.driver, 10).until(
-            EC.presence_of_element_located((By.ID, "username"))
-        )
-        username_field.send_keys(VALID_USERNAME)
-
-        password_field = context.driver.find_element(By.ID, "password")
-        password_field.send_keys(VALID_PASSWORD)
-
-        login_button = context.driver.find_element(By.ID, "loginbtn")
-        login_button.click()
-
-        WebDriverWait(context.driver, 15).until(EC.url_contains("/my/"))
-        print("✅ Login berhasil.")
-    except Exception as e:
-        raise AssertionError(f"Gagal melakukan login. Error: {e}")
+# =======================================================
 
 @given('The Student is on the "Pembangunan Perangkat Lunak (PPL) course" page')
 def step_impl_on_course_page(context):
@@ -51,8 +27,17 @@ def step_impl_on_course_page(context):
         print(f"Menemukan mata kuliah: {course_link.text}")
         course_link.click()
 
+        # Tunggu URL berubah
         WebDriverWait(context.driver, 15).until(EC.url_contains("/course/view.php"))
-        print(f"✅ Berhasil masuk ke halaman '{PPL_COURSE_NAME}'.")
+        
+        # === INI PERBAIKANNYA ===
+        # Tunggu juga sampai daftar materi (ul data-for='cmlist') muncul
+        # Ini untuk mengatasi race condition
+        WebDriverWait(context.driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "ul[data-for='cmlist']"))
+        )
+        
+        print(f"✅ Berhasil masuk ke halaman '{PPL_COURSE_NAME}' dan konten dimuat.")
     except Exception as e:
         raise AssertionError(f"Gagal membuka mata kuliah '{PPL_COURSE_NAME}'. Error: {e}")
 
@@ -72,7 +57,7 @@ def step_impl_click_assignment_link(context):
 
         print(f"Menemukan tugas: '{ASSIGNMENT_NAME}'. Mengklik...")
         context.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", assignment_link)
-        time.sleep(1)
+        time.sleep(1) # Diberi jeda singkat agar scroll selesai
         assignment_link.click()
 
         WebDriverWait(context.driver, 15).until(
@@ -81,12 +66,8 @@ def step_impl_click_assignment_link(context):
         print("✅ Halaman tugas berhasil dibuka.")
 
         time.sleep(3)
-        context.driver.quit()
-        print("🛑 Browser ditutup otomatis setelah membuka halaman tugas.")
+        print("🛑 Skenario assignment selesai.")
+    
     except Exception as e:
         print(f"DEBUG: XPath dicoba: {assignment_selector[1]}")
-        try:
-            context.driver.quit()
-        except:
-            pass
         raise AssertionError(f"Gagal membuka tugas '{ASSIGNMENT_NAME}'. Error: {e}")

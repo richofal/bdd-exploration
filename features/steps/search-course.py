@@ -6,33 +6,6 @@ from selenium.webdriver.support import expected_conditions as EC
 # URL Halaman "My courses" (Course Overview)
 COURSES_URL = "https://hebat.elearning.unair.ac.id/my/courses.php"
 
-# --- Step Definitions untuk Skenario Pencarian ---
-
-@given('The Student is logged in and on the "Course Overview" page')
-def step_impl(context):
-    """
-    Memverifikasi bahwa mahasiswa sudah login dan berada di halaman "Course Overview".
-    Step ini berasumsi login telah ditangani (misalnya di environment.py atau skenario sebelumnya).
-    Step ini akan mengarahkan ke halaman kursus jika belum, dan gagal jika tidak login.
-    """
-    if COURSES_URL not in context.driver.current_url:
-        context.driver.get(COURSES_URL)
-
-    try:
-        # Verifikasi kita berada di halaman yang benar (bukan login)
-        # dengan menunggu elemen search box (berdasarkan HTML yang diberikan)
-        WebDriverWait(context.driver, 10).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, "input[data-region='input']"))
-        )
-        
-        # Pastikan kita tidak dialihkan kembali ke halaman login
-        current_url = context.driver.current_url
-        assert "login/index.php" not in current_url, "Gagal memuat halaman Course Overview. Mahasiswa belum login."
-        print("Berhasil diverifikasi: Mahasiswa berada di 'Course Overview' page.")
-    
-    except Exception as e:
-        raise AssertionError(f"Gagal menemukan elemen 'Course Overview' page. Mungkin belum login. Error: {e}")
-
 @when('The Student enters "{search_term}" into the "Search" field')
 def step_impl(context, search_term):
     """
